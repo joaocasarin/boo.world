@@ -1,7 +1,7 @@
 'use strict';
 
-const { isProfileCreated, isProfileWithNameCreated } = require('../../middlewares/profile-exists');
-const ProfileModel = require('../../models/profile');
+const { isProfileCreated, isProfileWithNameCreated } = require('../../src/middlewares/profile-exists');
+const ProfileModel = require('../../src/models/profile');
 
 describe('Profile exists tests', () => {
     test('should add profile with given id to req if it exists', async () => {

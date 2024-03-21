@@ -1,8 +1,8 @@
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const { default: mongoose } = require("mongoose");
 const supertest = require("supertest");
-const app = require('../../app');
-const ProfileModel = require('../../models/profile');
+const app = require('../../src/app');
+const ProfileModel = require('../../src/models/profile');
 const cheerio = require('cheerio');
 
 describe('Profile routes', () => {

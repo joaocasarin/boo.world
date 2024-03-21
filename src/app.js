@@ -18,6 +18,7 @@ app.use(cors({
 app.use(helmet());
 
 // set the view engine to ejs
+app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 // routes

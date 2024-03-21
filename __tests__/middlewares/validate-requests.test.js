@@ -1,6 +1,6 @@
 'use strict';
 
-const { validateIdParam, validateProfileDataOnBody } = require('../../middlewares/validate-requests');
+const { validateIdParam, validateProfileDataOnBody } = require('../../src/middlewares/validate-requests');
 const { ZodError } = require('zod');
 
 describe('Validate requests tests', () => {
