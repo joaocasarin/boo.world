@@ -96,4 +96,49 @@ describe('Profile routes', () => {
         expect(response.status).toEqual(500);
         expect(response.body).not.toHaveProperty('profile');
     });
+
+    test('should return an empty list of profiles', async () => {
+        const response = await supertest(app)
+            .get('/profiles');
+        
+        expect(response.status).toEqual(200);
+        expect(response.body).toHaveProperty('profiles');
+        expect(response.body.profiles).toHaveLength(0);
+    });
+
+    test('should return a list with 2 profiles', async () => {
+        const profile1 = {
+            "name": "John 1",
+            "description": "desc",
+            "mbti": "INTP",
+            "enneagram": "ennea",
+            "variant": "var",
+            "tritype": 1,
+            "socionics": "soci",
+            "sloan": "sloan",
+            "psyche": "psy"
+        };
+
+        const profile2 = {
+            "name": "John 2",
+            "description": "desc",
+            "mbti": "INTP",
+            "enneagram": "ennea",
+            "variant": "var",
+            "tritype": 1,
+            "socionics": "soci",
+            "sloan": "sloan",
+            "psyche": "psy"
+        };
+
+        await ProfileModel.create(profile1);
+        await ProfileModel.create(profile2);
+
+        const response = await supertest(app)
+            .get('/profiles');
+        
+        expect(response.status).toEqual(200);
+        expect(response.body).toHaveProperty('profiles');
+        expect(response.body.profiles).toHaveLength(2);
+    });
 });

@@ -25,6 +25,14 @@ class ProfileController {
             profile
         });
     }
+
+    async getProfiles(_, res) {
+        const profiles = await ProfileModel.find({});
+    
+        return res.send({
+            profiles
+        });
+    }
 }
 
 module.exports = new ProfileController();
