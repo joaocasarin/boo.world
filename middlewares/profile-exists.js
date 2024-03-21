@@ -2,6 +2,16 @@
 
 const ProfileModel = require('../models/profile');
 
+const isProfileWithNameCreated = async (req, _, next) => {
+    const { name } = req.profileData;
+
+    const profile = await ProfileModel.findByName(name);
+
+    if (profile) return next(`Profile with name [${name}] already created.`);
+
+    return next();
+};
+
 const isProfileCreated = async (req, _, next) => {
     const { profileId } = req;
 
@@ -14,5 +24,6 @@ const isProfileCreated = async (req, _, next) => {
 };
 
 module.exports = {
-    isProfileCreated
+    isProfileCreated,
+    isProfileWithNameCreated
 };

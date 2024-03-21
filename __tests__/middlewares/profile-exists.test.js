@@ -1,6 +1,6 @@
 'use strict';
 
-const { isProfileCreated } = require('../../middlewares/profile-exists');
+const { isProfileCreated, isProfileWithNameCreated } = require('../../middlewares/profile-exists');
 const ProfileModel = require('../../models/profile');
 
 describe('Profile exists tests', () => {
@@ -34,5 +34,36 @@ describe('Profile exists tests', () => {
 
         expect(req).not.toHaveProperty('profile');
         expect(result).toEqual('Profile with Id [1fdc5d72-aee1-44f2-a557-ee2200d4e13a] not found.')
+    });
+
+    test('should not find profile with given name', async () => {
+        ProfileModel.findByName = jest.fn().mockResolvedValue(null);
+        
+        const req = {
+            profileData: {
+                name: 'John'
+            }
+        };
+
+        const result = await isProfileWithNameCreated(req, null, (text) => text);
+
+        expect(result).toBeUndefined();
+    });
+
+    test('should find profile with given name', async () => {
+        ProfileModel.findByName = jest.fn().mockResolvedValue({
+            id: '1fdc5d72-aee1-44f2-a557-ee2200d4e13a',
+            name: 'John'
+        });
+        
+        const req = {
+            profileData: {
+                name: 'John'
+            }
+        };
+
+        const result = await isProfileWithNameCreated(req, null, (text) => text);
+
+        expect(result).toEqual(`Profile with name [${req.profileData.name}] already created.`);
     });
 });
