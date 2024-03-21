@@ -3,6 +3,7 @@
 const cors = require('cors');
 const express = require('express');
 const app = express();
+const errorHandler = require('./errorHandler');
 const { default: helmet } = require('helmet');
 
 const profileRoute = require('./routes/profile');
@@ -21,5 +22,7 @@ app.set('view engine', 'ejs');
 
 // routes
 app.use('/', profileRoute);
+
+app.use(errorHandler);
 
 module.exports = app;
