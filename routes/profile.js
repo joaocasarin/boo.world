@@ -1,28 +1,11 @@
 'use strict';
 
 const express = require('express');
+const { validateIdParam } = require('../middlewares/validate-requests');
+const { isProfileCreated } = require('../middlewares/profile-exists');
+const profileController = require('../controllers/profile-controller');
 const router = express.Router();
 
-const profiles = [
-    {
-        "id": 1,
-        "name": "A Martinez",
-        "description": "Adolph Larrue Martinez III.",
-        "mbti": "ISFJ",
-        "enneagram": "9w3",
-        "variant": "sp/so",
-        "tritype": 725,
-        "socionics": "SEE",
-        "sloan": "RCOEN",
-        "psyche": "FEVL",
-        "image": "https://soulverse.boo.world/images/1.png",
-    }
-];
-
-router.get('/*', function(req, res, next) {
-    res.render('profile_template', {
-        profile: profiles[0],
-    });
-});
+router.get('/:id', validateIdParam, isProfileCreated, profileController.getProfile);
 
 module.exports = router;
