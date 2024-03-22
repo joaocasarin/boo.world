@@ -143,4 +143,62 @@ describe('Profile routes', () => {
         expect(response.body).toHaveProperty('profiles');
         expect(response.body.profiles).toHaveLength(2);
     });
+
+    test('should create a new comment for given profile id', async () => {
+        const profile = await ProfileModel.create({
+            name: "John",
+            description: "desc",
+            mbti: "INTP",
+            enneagram: "ennea",
+            variant: "var",
+            tritype: 1,
+            socionics: "soci",
+            sloan: "sloan",
+            psyche: "psy"
+        });
+
+        const data = {
+            "title": "New Comment",
+            "comment": "The comment details",
+            "mbti": "INTJ",
+            "enneagram": "123",
+            "zodiac": "123"
+        };
+
+        const response = await supertest(app)
+            .post(`/profiles/${profile.id}/comments`)
+            .send(data);
+
+        expect(response.status).toEqual(201);
+    });
+
+    test('should not create a comment with given data missing fields in req.body', async () => {
+        const profile = await ProfileModel.create({
+            name: "John",
+            description: "desc",
+            mbti: "INTP",
+            enneagram: "ennea",
+            variant: "var",
+            tritype: 1,
+            socionics: "soci",
+            sloan: "sloan",
+            psyche: "psy"
+        });
+
+        const data = {
+            "title": "New Comment",
+            "comment": "The comment details",
+            "mbti": "INTJ",
+            "enneagram": "123"
+        };
+
+        const response = await supertest(app)
+            .post(`/profiles/${profile.id}/comments`)
+            .send(data);
+        
+        expect(response.status).toEqual(500);
+        expect(response.body).toHaveProperty('success');
+        expect(response.body.success).toBeFalsy();
+        expect(response.body.errors).toHaveLength(1);
+    });
 });

@@ -1,6 +1,6 @@
 'use strict';
 
-const { validateIdParam, validateProfileDataOnBody } = require('../../src/middlewares/validate-requests');
+const { validateIdParam, validateProfileDataOnBody, validateCommentDataOnBody } = require('../../src/middlewares/validate-requests');
 const { ZodError } = require('zod');
 
 describe('Validate requests tests', () => {
@@ -33,7 +33,7 @@ describe('Validate requests tests', () => {
         });
     });
 
-    test('should validate request body data and add it to req object', () => {
+    test('should validate request body profile data and add it to req object', () => {
         const req = {
             body: {
                 "name": "John",
@@ -54,7 +54,7 @@ describe('Validate requests tests', () => {
         expect(req.profileData).toEqual(req.body);
     });
 
-    test('should invalidate request body data missing some fields', () => {
+    test('should invalidate request body profile data missing some fields', () => {
         const req = {
             body: {
                 "name": "John",
@@ -69,6 +69,39 @@ describe('Validate requests tests', () => {
         const result = validateProfileDataOnBody(req, null, (error) => error);
 
         expect(req).not.toHaveProperty('profileData');
+        expect(result instanceof ZodError).toBeTruthy();
+    });
+
+    test('should validate request body comment data and add it to req object', () => {
+        const req = {
+            body: {
+                "title": "New Comment",
+                "comment": "The comment details",
+                "mbti": "INTJ",
+                "enneagram": "123",
+                "zodiac": "123"
+            }
+        };
+
+        validateCommentDataOnBody(req, null, () => {});
+
+        expect(req).toHaveProperty('commentData');
+        expect(req.commentData).toEqual(req.body);
+    });
+
+    test('should invalidate request body comment data missing some fields', () => {
+        const req = {
+            body: {
+                "title": "New Comment",
+                "comment": "The comment details",
+                "mbti": "INTJ",
+                "enneagram": "123"
+            }
+        };
+
+        const result = validateCommentDataOnBody(req, null, (error) => error);
+
+        expect(req).not.toHaveProperty('commentData');
         expect(result instanceof ZodError).toBeTruthy();
     });
 });

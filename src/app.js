@@ -6,7 +6,8 @@ const app = express();
 const errorHandler = require('./errorHandler');
 const { default: helmet } = require('helmet');
 
-const profileRoute = require('./routes/profile');
+const profileRoutes = require('./routes/profile');
+const commentRoutes = require('./routes/comment');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -22,7 +23,8 @@ app.set('views', './src/views');
 app.set('view engine', 'ejs');
 
 // routes
-app.use('/', profileRoute);
+app.use('/', profileRoutes);
+app.use('/', commentRoutes);
 
 app.use(errorHandler);
 

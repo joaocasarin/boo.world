@@ -12,6 +12,19 @@ const removeIdFromCreateProfileData = (req, _, next) => {
     return next();
 };
 
+const removeIdFromCreateCommentData = (req, _, next) => {
+    const { commentData } = req;
+
+    if (commentData.hasOwnProperty('id')) {
+        const {id, ...data} = commentData;
+
+        req.commentData = data;
+    }
+
+    return next();
+};
+
 module.exports = {
+    removeIdFromCreateCommentData,
     removeIdFromCreateProfileData
 };

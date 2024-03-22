@@ -55,7 +55,11 @@ const ProfileSchema  = new Schema({
         type: String,
         default: "https://soulverse.boo.world/images/1.png",
         required: false
-    }
+    },
+    comments: [{
+        type: String,
+        ref: 'comment'
+    }]
 }, {
     statics: {
         findByID(id) {
@@ -63,6 +67,15 @@ const ProfileSchema  = new Schema({
         },
         findByName(name) {
             return this.findOne({ name });
+        },
+        findByIDAndUpdateComments(id, commentId) {
+            const profile = this.findOne({ id });
+
+            if (!profile) throw new Error({ status: 404, message: `Profile with id [${id}] not found.` });
+
+            return this.findOneAndUpdate({ id }, {
+                $push: { comments: commentId }
+            });
         }
     }
 });

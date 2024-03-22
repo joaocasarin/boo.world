@@ -1,6 +1,7 @@
 'use strict';
 
 const ProfileZodSchema = require('../schemas/profile');
+const CommentZodSchema = require('../schemas/comment');
 const { isUUIDv4 } = require('../helpers');
 
 const validateProfileDataOnBody = (req, _, next) => {
@@ -13,6 +14,19 @@ const validateProfileDataOnBody = (req, _, next) => {
     }
 
     req.profileData = body;
+    return next();
+};
+
+const validateCommentDataOnBody = (req, _, next) => {
+    const { body } = req;
+
+    const result = CommentZodSchema.safeParse(body);
+
+    if (!result.success) {
+        return next(result.error);
+    }
+
+    req.commentData = body;
     return next();
 };
 
@@ -30,5 +44,6 @@ const validateIdParam = (req, _, next) => {
 
 module.exports = {
     validateIdParam,
+    validateCommentDataOnBody,
     validateProfileDataOnBody
 };
