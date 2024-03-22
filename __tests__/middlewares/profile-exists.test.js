@@ -27,7 +27,7 @@ describe('Profile exists tests', () => {
         ProfileModel.findByID = jest.fn().mockResolvedValue(null);
         
         const req = {
-            profileId: '1fdc5d72-aee1-44f2-a557-ee2200d4e13a'
+            id: '1fdc5d72-aee1-44f2-a557-ee2200d4e13a'
         };
 
         const result = await isProfileCreated(req, null, (text) => text);

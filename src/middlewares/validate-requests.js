@@ -24,7 +24,7 @@ const validateIdParam = (req, _, next) => {
         message: `Provided Id [${params['id']}] is not a UUIDv4.`
     });
 
-    req.profileId = params['id'];
+    req.id = params['id'];
     return next();
 };
 

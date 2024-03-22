@@ -21,7 +21,7 @@ class ProfileController {
             return next(error);
         }
 
-        return res.send({
+        return res.status(201).send({
             profile
         });
     }

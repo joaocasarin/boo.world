@@ -72,7 +72,7 @@ describe('Profile routes', () => {
             .post('/profiles')
             .send(data);
         
-        expect(response.status).toEqual(200);
+        expect(response.status).toEqual(201);
         expect(response.body).toHaveProperty('profile');
         expect(response.body.profile).toHaveProperty('id');
         expect(response.body.profile.name).toEqual('John');

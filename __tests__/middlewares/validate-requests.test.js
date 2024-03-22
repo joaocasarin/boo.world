@@ -13,8 +13,8 @@ describe('Validate requests tests', () => {
 
         validateIdParam(req, null, (_) => {});
 
-        expect(req).toHaveProperty('profileId');
-        expect(req.profileId).toEqual(req.params.id);
+        expect(req).toHaveProperty('id');
+        expect(req.id).toEqual(req.params.id);
     });
 
     test('should invalidate given ID', () => {

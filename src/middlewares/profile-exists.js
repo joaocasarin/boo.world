@@ -16,13 +16,13 @@ const isProfileWithNameCreated = async (req, _, next) => {
 };
 
 const isProfileCreated = async (req, _, next) => {
-    const { profileId } = req;
+    const { id } = req;
 
-    const profile = await ProfileModel.findByID(profileId);
+    const profile = await ProfileModel.findByID(id);
 
     if (!profile) return next({
         status: 404,
-        message: `Profile with Id [${profileId}] not found.`
+        message: `Profile with Id [${id}] not found.`
     });
 
     req.profile = profile;
