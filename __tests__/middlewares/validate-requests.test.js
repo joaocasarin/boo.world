@@ -27,7 +27,10 @@ describe('Validate requests tests', () => {
         const result = validateIdParam(req, null, (text) => text);
 
         expect(req).not.toHaveProperty('profileId');
-        expect(result).toEqual(`Provided Id [${req.params.id}] is not a UUIDv4.`);
+        expect(result).toEqual({
+            status: 400, 
+            message: `Provided Id [${req.params.id}] is not a UUIDv4.`
+        });
     });
 
     test('should validate request body data and add it to req object', () => {

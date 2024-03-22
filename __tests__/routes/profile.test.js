@@ -43,7 +43,7 @@ describe('Profile routes', () => {
         const $ = cheerio.load(response.text);
 
         const nameElement = $('h2.name');
-        expect(nameElement.length).toEqual(1);
+        expect(nameElement).toHaveLength(1);
 
         expect(nameElement.text()).toContain('John MBTI');
     });
@@ -52,7 +52,7 @@ describe('Profile routes', () => {
         const id = '53047a36-0fe4-424d-9a4b-b567f4b0ef81';
 
         const response = await supertest(app).get(`/${id}`);
-        expect(response.status).toEqual(500);
+        expect(response.status).toEqual(404);
     });
 
     test('should create a profile with given data in req.body', async () => {
@@ -94,7 +94,9 @@ describe('Profile routes', () => {
             .send(data);
         
         expect(response.status).toEqual(500);
-        expect(response.body).not.toHaveProperty('profile');
+        expect(response.body).toHaveProperty('success');
+        expect(response.body.success).toBeFalsy();
+        expect(response.body.errors).toHaveLength(2);
     });
 
     test('should return an empty list of profiles', async () => {

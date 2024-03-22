@@ -19,7 +19,10 @@ const validateProfileDataOnBody = (req, _, next) => {
 const validateIdParam = (req, _, next) => {
     const { params } = req;
 
-    if (!isUUIDv4(params['id'])) return next(`Provided Id [${params['id']}] is not a UUIDv4.`);
+    if (!isUUIDv4(params['id'])) return next({
+        status: 400,
+        message: `Provided Id [${params['id']}] is not a UUIDv4.`
+    });
 
     req.profileId = params['id'];
     return next();
