@@ -24,17 +24,17 @@ const CommentSchema = new Schema(
         },
         mbti: {
             type: String,
-            required: true,
+            required: false,
             match: /^[IE][SN][FT][PJ]$/
         },
         enneagram: {
             type: String,
-            required: true
+            required: false
             // match: /^([1-9]w[1-9])$/
         },
         zodiac: {
             type: String,
-            required: true
+            required: false
             // match: /^(SP|SO|SX)(\/(SP|SO|SX))*$/
         },
         reactions: [

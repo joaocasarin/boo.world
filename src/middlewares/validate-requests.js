@@ -33,7 +33,7 @@ const validateIdParam = (req, _, next) => {
     const { params } = req;
 
     if (!isUUIDv4(params.id))
-        return next(new CustomError(400, `Provided Id [${params.id}] is not a UUIDv4.`));
+        return next(new CustomError(400, `Provided Id [${params.id}] is not a valid UUIDv4.`));
 
     req.id = params.id;
     return next();
