@@ -20,7 +20,7 @@ module.exports = {
         ecmaVersion: 12,
         sourceType: 'module'
     },
-    ignorePatterns: ['node_modules/', 'package-lock.json'],
+    ignorePatterns: ['node_modules/', 'package-lock.json', 'logs/'],
     plugins: ['prettier'],
     rules: {
         'import/extensions': ['error', 'never'],

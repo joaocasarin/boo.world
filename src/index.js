@@ -1,5 +1,6 @@
 const app = require('./app');
 const connectToMongoDB = require('./libs/database');
+const Logger = require('./configs/logger');
 
 const port = process.env.PORT || 3000;
 
@@ -8,5 +9,5 @@ connectToMongoDB();
 
 // start server
 app.listen(port, () => {
-    console.log(`Express started. Listening on ${port}`);
+    Logger.info(`Express started. Listening on ${port}`);
 });

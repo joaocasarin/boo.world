@@ -1,6 +1,7 @@
 const CustomError = require('../helpers/CustomError');
 const updateCommentService = require('../services/updateCommentService');
 const createCommentService = require('../services/createCommentService');
+const Logger = require('../configs/logger');
 
 class CommentController {
     async createComment(req, res, next) {
@@ -12,6 +13,7 @@ class CommentController {
 
             if (comment instanceof CustomError) return next(comment);
 
+            Logger.info(`Creating comment: ${JSON.stringify(comment)}`);
             return res.status(201).send({
                 comment
             });
@@ -28,6 +30,7 @@ class CommentController {
 
         if (comment instanceof CustomError) next(comment);
 
+        Logger.info(`Reacting to comment: ${JSON.stringify(comment)}`);
         return res.send({
             comment
         });

@@ -3,6 +3,7 @@ const createProfileService = require('../services/createProfileService');
 const getCommentsService = require('../services/getCommentsService');
 const getProfileService = require('../services/getProfileService');
 const getProfilesService = require('../services/getProfilesService');
+const Logger = require('../configs/logger');
 
 class ProfileController {
     async createProfile(req, res, next) {
@@ -12,6 +13,7 @@ class ProfileController {
 
             if (profile instanceof CustomError) return next(profile);
 
+            Logger.info(`Creating profile: ${JSON.stringify(profile)}`);
             return res.status(201).send({
                 profile
             });
@@ -28,6 +30,7 @@ class ProfileController {
 
             if (profile instanceof CustomError) return next(profile);
 
+            Logger.info(`Getting profile: ${JSON.stringify(profile)}`);
             return res.render('profile_template', {
                 profile
             });
@@ -42,6 +45,7 @@ class ProfileController {
         try {
             const profiles = await getProfilesService({ query });
 
+            Logger.info(`Getting all profiles: ${JSON.stringify(profiles)}`);
             return res.send({
                 profiles
             });
@@ -58,6 +62,7 @@ class ProfileController {
 
             if (comments instanceof CustomError) return next(comments);
 
+            Logger.info(`Getting profile comments: ID: ${id} - ${JSON.stringify(comments)}`);
             return res.send({
                 comments
             });
