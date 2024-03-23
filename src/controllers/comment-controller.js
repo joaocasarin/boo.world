@@ -1,5 +1,6 @@
-const ProfileModel = require('../models/profile');
-const CommentModel = require('../models/comment');
+const CustomError = require('../helpers/CustomError');
+const updateCommentService = require('../services/updateCommentService');
+const createCommentService = require('../services/createCommentService');
 
 class CommentController {
     async createComment(req, res, next) {
@@ -7,8 +8,9 @@ class CommentController {
         const commentData = req.body;
 
         try {
-            const comment = await CommentModel.create(commentData);
-            await ProfileModel.findByIDAndUpdateComments(id, comment.id);
+            const comment = await createCommentService({ id, commentData });
+
+            if (comment instanceof CustomError) return next(comment);
 
             return res.status(201).send({
                 comment
@@ -22,15 +24,13 @@ class CommentController {
         const { id } = req;
         const { profileId, reaction } = req.body;
 
-        try {
-            const comment = await CommentModel.findByIDAndReact(id, { profileId, reaction });
+        const comment = await updateCommentService({ id, profileId, reaction });
 
-            return res.send({
-                comment
-            });
-        } catch (error) {
-            return next(error);
-        }
+        if (comment instanceof CustomError) next(comment);
+
+        return res.send({
+            comment
+        });
     }
 }
 

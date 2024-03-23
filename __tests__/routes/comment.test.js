@@ -23,9 +23,11 @@ describe('Comment routes', () => {
     });
 
     test('should like a comment with given id', async () => {
+        const profileId = 'fc2008d2-40cb-4307-9a0c-fcd9a8228873';
+
         const comment = await CommentModel.create({
             title: 'New Comment',
-            authorId: 'fc2008d2-40cb-4307-9a0c-fcd9a8228873',
+            authorId: profileId,
             comment: 'The comment details',
             mbti: 'INTJ',
             enneagram: '123',
@@ -33,7 +35,7 @@ describe('Comment routes', () => {
         });
 
         const data = {
-            profileId: '216c76c4-01f2-4aa8-8868-315cf2ea6520',
+            profileId,
             reaction: 'like'
         };
 
@@ -44,18 +46,19 @@ describe('Comment routes', () => {
     });
 
     test('should dislike a comment with given id', async () => {
+        const profileId = 'fc2008d2-40cb-4307-9a0c-fcd9a8228873';
         const comment = await CommentModel.create({
             title: 'New Comment',
-            authorId: 'fc2008d2-40cb-4307-9a0c-fcd9a8228873',
+            authorId: profileId,
             comment: 'The comment details',
             mbti: 'INTJ',
             enneagram: '123',
             zodiac: '123',
-            reactions: ['216c76c4-01f2-4aa8-8868-315cf2ea6520']
+            reactions: [profileId]
         });
 
         const data = {
-            profileId: '216c76c4-01f2-4aa8-8868-315cf2ea6520',
+            profileId,
             reaction: 'unlike'
         };
 

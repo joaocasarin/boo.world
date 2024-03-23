@@ -31,7 +31,7 @@ describe('Validate requests tests', () => {
 
         expect(req).not.toHaveProperty('profileId');
         expect(result instanceof CustomError).toBeTruthy();
-        expect(result.message).toEqual(`Provided Id [${req.params.id}] is not a UUIDv4.`);
+        expect(result.message).toEqual(`Provided Id [${req.params.id}] is not a valid UUIDv4.`);
         expect(result.status).toEqual(400);
     });
 

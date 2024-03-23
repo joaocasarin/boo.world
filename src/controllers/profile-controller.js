@@ -1,56 +1,69 @@
-const ProfileModel = require('../models/profile');
+const CustomError = require('../helpers/CustomError');
+const createProfileService = require('../services/createProfileService');
+const getCommentsService = require('../services/getCommentsService');
+const getProfileService = require('../services/getProfileService');
+const getProfilesService = require('../services/getProfilesService');
 
 class ProfileController {
-    async getProfile(req, res) {
-        const { profile } = req;
-
-        return res.render('profile_template', {
-            profile
-        });
-    }
-
     async createProfile(req, res, next) {
         const { profileData } = req;
-        let profile;
-
         try {
-            profile = await ProfileModel.create(profileData);
-        } catch (error) {
-            return next(error);
-        }
+            const profile = await createProfileService({ profileData });
 
-        return res.status(201).send({
-            profile
-        });
-    }
+            if (profile instanceof CustomError) return next(profile);
 
-    async getProfiles(_, res) {
-        const profiles = await ProfileModel.find({});
-
-        return res.send({
-            profiles
-        });
-    }
-
-    async getComments(req, res, next) {
-        const { id } = req;
-
-        const profile = await ProfileModel.findByID(id);
-        let comments;
-
-        try {
-            comments = await profile.populate({
-                path: 'comments',
-                model: 'comment',
-                foreignField: 'id'
+            return res.status(201).send({
+                profile
             });
         } catch (error) {
             return next(error);
         }
+    }
 
-        return res.send({
-            comments
-        });
+    async getProfile(req, res, next) {
+        const { id } = req;
+
+        try {
+            const profile = await getProfileService({ id });
+
+            if (profile instanceof CustomError) return next(profile);
+
+            return res.render('profile_template', {
+                profile
+            });
+        } catch (error) {
+            return next(error);
+        }
+    }
+
+    async getProfiles(req, res, next) {
+        const { query } = req;
+
+        try {
+            const profiles = await getProfilesService({ query });
+
+            return res.send({
+                profiles
+            });
+        } catch (error) {
+            return next(error);
+        }
+    }
+
+    async getComments(req, res, next) {
+        const { id, query } = req;
+
+        try {
+            const comments = await getCommentsService({ id, query });
+
+            if (comments instanceof CustomError) return next(comments);
+
+            return res.send({
+                comments
+            });
+        } catch (error) {
+            return next(error);
+        }
     }
 }
 

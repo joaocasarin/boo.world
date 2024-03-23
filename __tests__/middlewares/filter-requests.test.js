@@ -21,7 +21,7 @@ describe('Filter requests tests', () => {
         const req = {
             commentData: {
                 id: 1,
-                title: 'Comment 1'
+                title: 'Comment'
             }
         };
 
