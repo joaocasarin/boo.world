@@ -159,6 +159,7 @@ describe('Profile routes', () => {
 
         const data = {
             "title": "New Comment",
+            "authorId": "fc2008d2-40cb-4307-9a0c-fcd9a8228873",
             "comment": "The comment details",
             "mbti": "INTJ",
             "enneagram": "123",
@@ -199,6 +200,6 @@ describe('Profile routes', () => {
         expect(response.status).toEqual(500);
         expect(response.body).toHaveProperty('success');
         expect(response.body.success).toBeFalsy();
-        expect(response.body.errors).toHaveLength(1);
+        expect(response.body.errors).toHaveLength(2);
     });
 });

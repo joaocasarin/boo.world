@@ -7,7 +7,6 @@ const commentController = require('../controllers/comment-controller');
 
 const router = express.Router();
 
-router.put('/comments/:id/like', validateIdParam, isCommentCreated, commentController.likeComment);
-router.put('/comments/:id/dislike', validateIdParam, isCommentCreated, commentController.dislikeComment);
+router.put('/comments/:id/react', validateIdParam, isCommentCreated, commentController.reactToComment);
 
 module.exports = router;

@@ -76,6 +76,7 @@ describe('Validate requests tests', () => {
         const req = {
             body: {
                 "title": "New Comment",
+                "authorId": "fc2008d2-40cb-4307-9a0c-fcd9a8228873",
                 "comment": "The comment details",
                 "mbti": "INTJ",
                 "enneagram": "123",

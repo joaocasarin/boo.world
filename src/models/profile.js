@@ -2,6 +2,7 @@
 
 const { model, Schema } = require('mongoose');
 const { randomUUID } = require('crypto');
+const CustomError = require('../helpers/CustomError');
 
 const ProfileSchema  = new Schema({
     id: {
@@ -68,14 +69,14 @@ const ProfileSchema  = new Schema({
         findByName(name) {
             return this.findOne({ name });
         },
-        findByIDAndUpdateComments(id, commentId) {
-            const profile = this.findOne({ id });
+        async findByIDAndUpdateComments(id, commentId) {
+            const profile = await this.findOne({ id });
 
             if (!profile) throw new CustomError(404, `Profile with id [${id}] not found.`);
 
             return this.findOneAndUpdate({ id }, {
                 $push: { comments: commentId }
-            });
+            }, { new: true });
         }
     }
 });

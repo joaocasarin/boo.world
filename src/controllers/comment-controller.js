@@ -8,50 +8,31 @@ class CommentController {
         const { id } = req;
         const commentData = req.body;
 
-        let comment;
-
         try {
-            comment = await CommentModel.create(commentData);
+            const comment = await CommentModel.create(commentData);
             await ProfileModel.findByIDAndUpdateComments(id, comment.id);
+
+            return res.status(201).send({
+                comment
+            });
         } catch (error) {
             return next(error);
         }
-
-        return res.status(201).send({
-            comment
-        });
     }
 
-    async likeComment(req, res, next) {
+    async reactToComment(req, res, next) {
         const { id } = req;
-
-        let comment;
+        const { profileId, reaction } = req.body;
 
         try {
-            comment = await CommentModel.findByIDAndLikeComment(id);
+            const comment = await CommentModel.findByIDAndReact(id, { profileId, reaction });
+
+            return res.send({
+                comment
+            });
         } catch (error) {
             return next(error);
         }
-
-        return res.send({
-            comment
-        });
-    }
-
-    async dislikeComment(req, res, next) {
-        const { id } = req;
-
-        let comment;
-
-        try {
-            comment = await CommentModel.findByIDAndDislikeComment(id);
-        } catch (error) {
-            return next(error);
-        }
-
-        return res.send({
-            comment
-        });
     }
 }
 

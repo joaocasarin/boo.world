@@ -11,6 +11,10 @@ const CommentSchema  = new Schema({
         required: false,
         unique: true
     },
+    authorId: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
         required: true
@@ -34,32 +38,43 @@ const CommentSchema  = new Schema({
         required: true,
         // match: /^(SP|SO|SX)(\/(SP|SO|SX))*$/
     },
-    likes: {
-        type: Number,
-        default: 0,
-        required: false
-    }
+    reactions: [{
+        type: String,
+        ref: 'profile'
+    }]
 }, {
     statics: {
         findByID(id) {
             return this.findOne({ id });
         },
-        findByIDAndLikeComment(id) {
-            const comment = this.findOne({ id });
+        findByProfileID(authorId) {
+            return this.find({ authorId });
+        },
+        async findByIDAndReact(id, { profileId, reaction }) {
+            const comment = await this.findOne({ id });
 
             if (!comment) throw new CustomError(404,`Comment with id [${id}] not found.`);
 
-            return this.findOneAndUpdate({ id }, {
-                $inc: { likes: 1 }
-            }, { new: true });
-        },
-        findByIDAndDislikeComment(id) {
-            const comment = this.findOne({ id });
+            const { reactions } = comment;
 
-            if (!comment) throw new Error({ status: 404, message: `Comment with id [${id}] not found.` });
+            const isCommentReactedByProfile = reactions.some(reactionId => reactionId === profileId);
+
+            if (reaction === 'unlike' && isCommentReactedByProfile) {
+                const newReactions = reactions.filter((reactionId) => reactionId !== profileId);
+
+                return this.findOneAndUpdate({ id },{
+                    $set: {
+                        reactions: newReactions
+                    }
+                },{ new: true })
+            }
+
+            if (reaction === 'unlike' && !isCommentReactedByProfile) throw new CustomError(404, `Profile with id [${profileId}] haven't reacted to this comment yet.`);
+
+            if (reaction === 'like' && isCommentReactedByProfile) throw new CustomError(409, `Profile with id [${profileId}] already reacted to this comment.`);
 
             return this.findOneAndUpdate({ id }, {
-                $inc: { likes: -1 }
+                $push: { reactions: profileId }
             }, { new: true });
         }
     }
