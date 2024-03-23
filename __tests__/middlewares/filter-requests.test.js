@@ -1,6 +1,7 @@
-'use strict';
-
-const { removeIdFromCreateProfileData, removeIdFromCreateCommentData } = require('../../src/middlewares/filter-requests');
+const {
+    removeIdFromCreateProfileData,
+    removeIdFromCreateCommentData
+} = require('../../src/middlewares/filter-requests');
 
 describe('Filter requests tests', () => {
     test('should remove id from request body when creating a profile', () => {

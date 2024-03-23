@@ -1,5 +1,3 @@
-'use strict';
-
 const ProfileModel = require('../models/profile');
 const CommentModel = require('../models/comment');
 

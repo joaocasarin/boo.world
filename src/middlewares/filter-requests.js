@@ -1,10 +1,8 @@
-'use strict';
-
 const removeIdFromCreateProfileData = (req, _, next) => {
     const { profileData } = req;
 
-    if (profileData.hasOwnProperty('id')) {
-        const {id, ...data} = profileData;
+    if (Object.prototype.hasOwnProperty.call(profileData, 'id')) {
+        const { id, ...data } = profileData;
 
         req.profileData = data;
     }
@@ -15,8 +13,8 @@ const removeIdFromCreateProfileData = (req, _, next) => {
 const removeIdFromCreateCommentData = (req, _, next) => {
     const { commentData } = req;
 
-    if (commentData.hasOwnProperty('id')) {
-        const {id, ...data} = commentData;
+    if (Object.prototype.hasOwnProperty.call(commentData, 'id')) {
+        const { id, ...data } = commentData;
 
         req.commentData = data;
     }

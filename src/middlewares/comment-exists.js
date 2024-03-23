@@ -1,5 +1,3 @@
-'use strict';
-
 const CustomError = require('../helpers/CustomError');
 const CommentModel = require('../models/comment');
 

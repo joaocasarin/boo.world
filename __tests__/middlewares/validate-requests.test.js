@@ -1,8 +1,10 @@
-'use strict';
-
-const CustomError = require('../../src/helpers/CustomError');
-const { validateIdParam, validateProfileDataOnBody, validateCommentDataOnBody } = require('../../src/middlewares/validate-requests');
 const { ZodError } = require('zod');
+const CustomError = require('../../src/helpers/CustomError');
+const {
+    validateIdParam,
+    validateProfileDataOnBody,
+    validateCommentDataOnBody
+} = require('../../src/middlewares/validate-requests');
 
 describe('Validate requests tests', () => {
     test('should validate given ID and add it to req object', () => {
@@ -12,7 +14,7 @@ describe('Validate requests tests', () => {
             }
         };
 
-        validateIdParam(req, null, (_) => {});
+        validateIdParam(req, null, () => {});
 
         expect(req).toHaveProperty('id');
         expect(req.id).toEqual(req.params.id);
@@ -36,15 +38,15 @@ describe('Validate requests tests', () => {
     test('should validate request body profile data and add it to req object', () => {
         const req = {
             body: {
-                "name": "John",
-                "description": "desc",
-                "mbti": "INTP",
-                "enneagram": "ennea",
-                "variant": "var",
-                "tritype": 1,
-                "socionics": "soci",
-                "sloan": "sloan",
-                "psyche": "psy"
+                name: 'John',
+                description: 'desc',
+                mbti: 'INTP',
+                enneagram: 'ennea',
+                variant: 'var',
+                tritype: 1,
+                socionics: 'soci',
+                sloan: 'sloan',
+                psyche: 'psy'
             }
         };
 
@@ -57,12 +59,12 @@ describe('Validate requests tests', () => {
     test('should invalidate request body profile data missing some fields', () => {
         const req = {
             body: {
-                "name": "John",
-                "description": "desc",
-                "mbti": "INTP",
-                "enneagram": "ennea",
-                "variant": "var",
-                "tritype": 1
+                name: 'John',
+                description: 'desc',
+                mbti: 'INTP',
+                enneagram: 'ennea',
+                variant: 'var',
+                tritype: 1
             }
         };
 
@@ -75,12 +77,12 @@ describe('Validate requests tests', () => {
     test('should validate request body comment data and add it to req object', () => {
         const req = {
             body: {
-                "title": "New Comment",
-                "authorId": "fc2008d2-40cb-4307-9a0c-fcd9a8228873",
-                "comment": "The comment details",
-                "mbti": "INTJ",
-                "enneagram": "123",
-                "zodiac": "123"
+                title: 'New Comment',
+                authorId: 'fc2008d2-40cb-4307-9a0c-fcd9a8228873',
+                comment: 'The comment details',
+                mbti: 'INTJ',
+                enneagram: '123',
+                zodiac: '123'
             }
         };
 
@@ -93,10 +95,10 @@ describe('Validate requests tests', () => {
     test('should invalidate request body comment data missing some fields', () => {
         const req = {
             body: {
-                "title": "New Comment",
-                "comment": "The comment details",
-                "mbti": "INTJ",
-                "enneagram": "123"
+                title: 'New Comment',
+                comment: 'The comment details',
+                mbti: 'INTJ',
+                enneagram: '123'
             }
         };
 

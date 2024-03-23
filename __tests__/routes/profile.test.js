@@ -1,9 +1,9 @@
-const { MongoMemoryServer } = require("mongodb-memory-server");
-const { default: mongoose } = require("mongoose");
-const supertest = require("supertest");
+const { MongoMemoryServer } = require('mongodb-memory-server');
+const { default: mongoose } = require('mongoose');
+const supertest = require('supertest');
+const cheerio = require('cheerio');
 const app = require('../../src/app');
 const ProfileModel = require('../../src/models/profile');
-const cheerio = require('cheerio');
 
 describe('Profile routes', () => {
     let mongoServer;
@@ -25,19 +25,18 @@ describe('Profile routes', () => {
 
     test('should render the profile data', async () => {
         const profile = await ProfileModel.create({
-            name: "John",
-            description: "desc",
-            mbti: "INTP",
-            enneagram: "ennea",
-            variant: "var",
+            name: 'John',
+            description: 'desc',
+            mbti: 'INTP',
+            enneagram: 'ennea',
+            variant: 'var',
             tritype: 1,
-            socionics: "soci",
-            sloan: "sloan",
-            psyche: "psy"
+            socionics: 'soci',
+            sloan: 'sloan',
+            psyche: 'psy'
         });
 
-        const response = await supertest(app)
-            .get(`/${profile.id}`);
+        const response = await supertest(app).get(`/${profile.id}`);
         expect(response.status).toEqual(200);
 
         const $ = cheerio.load(response.text);
@@ -57,21 +56,19 @@ describe('Profile routes', () => {
 
     test('should create a profile with given data in req.body', async () => {
         const data = {
-            name: "John",
-            description: "desc",
-            mbti: "INTP",
-            enneagram: "ennea",
-            variant: "var",
+            name: 'John',
+            description: 'desc',
+            mbti: 'INTP',
+            enneagram: 'ennea',
+            variant: 'var',
             tritype: 1,
-            socionics: "soci",
-            sloan: "sloan",
-            psyche: "psy"
+            socionics: 'soci',
+            sloan: 'sloan',
+            psyche: 'psy'
         };
 
-        const response = await supertest(app)
-            .post('/profiles')
-            .send(data);
-        
+        const response = await supertest(app).post('/profiles').send(data);
+
         expect(response.status).toEqual(201);
         expect(response.body).toHaveProperty('profile');
         expect(response.body.profile).toHaveProperty('id');
@@ -80,19 +77,17 @@ describe('Profile routes', () => {
 
     test('should not create a profile with given data missing fields in req.body', async () => {
         const data = {
-            name: "John",
-            description: "desc",
-            mbti: "INTP",
-            enneagram: "ennea",
-            variant: "var",
+            name: 'John',
+            description: 'desc',
+            mbti: 'INTP',
+            enneagram: 'ennea',
+            variant: 'var',
             tritype: 1,
-            socionics: "soci"
+            socionics: 'soci'
         };
 
-        const response = await supertest(app)
-            .post('/profiles')
-            .send(data);
-        
+        const response = await supertest(app).post('/profiles').send(data);
+
         expect(response.status).toEqual(500);
         expect(response.body).toHaveProperty('success');
         expect(response.body.success).toBeFalsy();
@@ -100,9 +95,8 @@ describe('Profile routes', () => {
     });
 
     test('should return an empty list of profiles', async () => {
-        const response = await supertest(app)
-            .get('/profiles');
-        
+        const response = await supertest(app).get('/profiles');
+
         expect(response.status).toEqual(200);
         expect(response.body).toHaveProperty('profiles');
         expect(response.body.profiles).toHaveLength(0);
@@ -110,35 +104,34 @@ describe('Profile routes', () => {
 
     test('should return a list with 2 profiles', async () => {
         const profile1 = {
-            "name": "John 1",
-            "description": "desc",
-            "mbti": "INTP",
-            "enneagram": "ennea",
-            "variant": "var",
-            "tritype": 1,
-            "socionics": "soci",
-            "sloan": "sloan",
-            "psyche": "psy"
+            name: 'John 1',
+            description: 'desc',
+            mbti: 'INTP',
+            enneagram: 'ennea',
+            variant: 'var',
+            tritype: 1,
+            socionics: 'soci',
+            sloan: 'sloan',
+            psyche: 'psy'
         };
 
         const profile2 = {
-            "name": "John 2",
-            "description": "desc",
-            "mbti": "INTP",
-            "enneagram": "ennea",
-            "variant": "var",
-            "tritype": 1,
-            "socionics": "soci",
-            "sloan": "sloan",
-            "psyche": "psy"
+            name: 'John 2',
+            description: 'desc',
+            mbti: 'INTP',
+            enneagram: 'ennea',
+            variant: 'var',
+            tritype: 1,
+            socionics: 'soci',
+            sloan: 'sloan',
+            psyche: 'psy'
         };
 
         await ProfileModel.create(profile1);
         await ProfileModel.create(profile2);
 
-        const response = await supertest(app)
-            .get('/profiles');
-        
+        const response = await supertest(app).get('/profiles');
+
         expect(response.status).toEqual(200);
         expect(response.body).toHaveProperty('profiles');
         expect(response.body.profiles).toHaveLength(2);
@@ -146,57 +139,53 @@ describe('Profile routes', () => {
 
     test('should create a new comment for given profile id', async () => {
         const profile = await ProfileModel.create({
-            name: "John",
-            description: "desc",
-            mbti: "INTP",
-            enneagram: "ennea",
-            variant: "var",
+            name: 'John',
+            description: 'desc',
+            mbti: 'INTP',
+            enneagram: 'ennea',
+            variant: 'var',
             tritype: 1,
-            socionics: "soci",
-            sloan: "sloan",
-            psyche: "psy"
+            socionics: 'soci',
+            sloan: 'sloan',
+            psyche: 'psy'
         });
 
         const data = {
-            "title": "New Comment",
-            "authorId": "fc2008d2-40cb-4307-9a0c-fcd9a8228873",
-            "comment": "The comment details",
-            "mbti": "INTJ",
-            "enneagram": "123",
-            "zodiac": "123"
+            title: 'New Comment',
+            authorId: 'fc2008d2-40cb-4307-9a0c-fcd9a8228873',
+            comment: 'The comment details',
+            mbti: 'INTJ',
+            enneagram: '123',
+            zodiac: '123'
         };
 
-        const response = await supertest(app)
-            .post(`/profiles/${profile.id}/comments`)
-            .send(data);
+        const response = await supertest(app).post(`/profiles/${profile.id}/comments`).send(data);
 
         expect(response.status).toEqual(201);
     });
 
     test('should not create a comment with given data missing fields in req.body', async () => {
         const profile = await ProfileModel.create({
-            name: "John",
-            description: "desc",
-            mbti: "INTP",
-            enneagram: "ennea",
-            variant: "var",
+            name: 'John',
+            description: 'desc',
+            mbti: 'INTP',
+            enneagram: 'ennea',
+            variant: 'var',
             tritype: 1,
-            socionics: "soci",
-            sloan: "sloan",
-            psyche: "psy"
+            socionics: 'soci',
+            sloan: 'sloan',
+            psyche: 'psy'
         });
 
         const data = {
-            "title": "New Comment",
-            "comment": "The comment details",
-            "mbti": "INTJ",
-            "enneagram": "123"
+            title: 'New Comment',
+            comment: 'The comment details',
+            mbti: 'INTJ',
+            enneagram: '123'
         };
 
-        const response = await supertest(app)
-            .post(`/profiles/${profile.id}/comments`)
-            .send(data);
-        
+        const response = await supertest(app).post(`/profiles/${profile.id}/comments`).send(data);
+
         expect(response.status).toEqual(500);
         expect(response.body).toHaveProperty('success');
         expect(response.body.success).toBeFalsy();

@@ -1,12 +1,10 @@
-'use strict';
+const { ZodError } = require('zod');
+const CustomError = require('../helpers/CustomError');
 
-const { ZodError } = require("zod");
-const CustomError = require("../helpers/CustomError");
-
+// eslint-disable-next-line no-unused-vars
 const errorHandler = async (error, _req, res, _next) => {
-
     if (error instanceof ZodError) {
-        const errors = error.errors.map(e => e.message);
+        const errors = error.errors.map((e) => e.message);
 
         return res.status(500).send({
             success: false,

@@ -1,11 +1,9 @@
-'use strict';
-
 const ProfileModel = require('../models/profile');
 
 class ProfileController {
     async getProfile(req, res) {
         const { profile } = req;
-    
+
         return res.render('profile_template', {
             profile
         });
@@ -28,7 +26,7 @@ class ProfileController {
 
     async getProfiles(_, res) {
         const profiles = await ProfileModel.find({});
-    
+
         return res.send({
             profiles
         });
@@ -49,7 +47,7 @@ class ProfileController {
         } catch (error) {
             return next(error);
         }
-    
+
         return res.send({
             comments
         });

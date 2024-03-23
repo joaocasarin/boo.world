@@ -1,5 +1,3 @@
-'use strict';
-
 const CustomError = require('../helpers/CustomError');
 const ProfileModel = require('../models/profile');
 

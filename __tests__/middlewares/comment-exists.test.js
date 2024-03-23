@@ -1,5 +1,3 @@
-'use strict';
-
 const CustomError = require('../../src/helpers/CustomError');
 const { isCommentCreated } = require('../../src/middlewares/comment-exists');
 const CommentModel = require('../../src/models/comment');
@@ -10,12 +8,12 @@ describe('Comment exists tests', () => {
             id: '1fdc5d72-aee1-44f2-a557-ee2200d4e13a',
             title: 'Comment 1'
         });
-        
+
         const req = {
             id: '1fdc5d72-aee1-44f2-a557-ee2200d4e13a'
         };
 
-        await isCommentCreated(req, null, (_) => {});
+        await isCommentCreated(req, null, () => {});
 
         expect(req).toHaveProperty('comment');
         expect(req.comment).toHaveProperty('id');
@@ -26,7 +24,7 @@ describe('Comment exists tests', () => {
 
     test('should not add comment with given id to req if it does not exist', async () => {
         CommentModel.findByID = jest.fn().mockResolvedValue(null);
-        
+
         const req = {
             id: '1fdc5d72-aee1-44f2-a557-ee2200d4e13a'
         };
@@ -34,7 +32,9 @@ describe('Comment exists tests', () => {
         const result = await isCommentCreated(req, null, (text) => text);
 
         expect(result instanceof CustomError).toBeTruthy();
-        expect(result.message).toEqual('Comment with Id [1fdc5d72-aee1-44f2-a557-ee2200d4e13a] not found.');
+        expect(result.message).toEqual(
+            'Comment with Id [1fdc5d72-aee1-44f2-a557-ee2200d4e13a] not found.'
+        );
         expect(result.status).toEqual(404);
     });
 });
