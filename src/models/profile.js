@@ -71,7 +71,7 @@ const ProfileSchema  = new Schema({
         findByIDAndUpdateComments(id, commentId) {
             const profile = this.findOne({ id });
 
-            if (!profile) throw new Error({ status: 404, message: `Profile with id [${id}] not found.` });
+            if (!profile) throw new CustomError(404, `Profile with id [${id}] not found.`);
 
             return this.findOneAndUpdate({ id }, {
                 $push: { comments: commentId }

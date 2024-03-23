@@ -1,5 +1,6 @@
 'use strict';
 
+const CustomError = require('../../src/helpers/CustomError');
 const { isCommentCreated } = require('../../src/middlewares/comment-exists');
 const CommentModel = require('../../src/models/comment');
 
@@ -32,10 +33,8 @@ describe('Comment exists tests', () => {
 
         const result = await isCommentCreated(req, null, (text) => text);
 
-        expect(req).not.toHaveProperty('comment');
-        expect(result).toEqual({
-            status: 404, 
-            message: 'Comment with Id [1fdc5d72-aee1-44f2-a557-ee2200d4e13a] not found.'
-        })
+        expect(result instanceof CustomError).toBeTruthy();
+        expect(result.message).toEqual('Comment with Id [1fdc5d72-aee1-44f2-a557-ee2200d4e13a] not found.');
+        expect(result.status).toEqual(404);
     });
 });

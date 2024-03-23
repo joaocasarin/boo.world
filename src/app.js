@@ -3,7 +3,7 @@
 const cors = require('cors');
 const express = require('express');
 const app = express();
-const errorHandler = require('./errorHandler');
+const errorHandler = require('./middlewares/errorHandler');
 const { default: helmet } = require('helmet');
 
 const profileRoutes = require('./routes/profile');

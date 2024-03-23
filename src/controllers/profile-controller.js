@@ -33,6 +33,27 @@ class ProfileController {
             profiles
         });
     }
+
+    async getComments(req, res, next) {
+        const { id } = req;
+
+        const profile = await ProfileModel.findByID(id);
+        let comments;
+
+        try {
+            comments = await profile.populate({
+                path: 'comments',
+                model: 'comment',
+                foreignField: 'id'
+            });
+        } catch (error) {
+            return next(error);
+        }
+    
+        return res.send({
+            comments
+        });
+    }
 }
 
 module.exports = new ProfileController();

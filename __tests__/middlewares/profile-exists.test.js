@@ -1,5 +1,6 @@
 'use strict';
 
+const CustomError = require('../../src/helpers/CustomError');
 const { isProfileCreated, isProfileWithNameCreated } = require('../../src/middlewares/profile-exists');
 const ProfileModel = require('../../src/models/profile');
 
@@ -33,10 +34,9 @@ describe('Profile exists tests', () => {
         const result = await isProfileCreated(req, null, (text) => text);
 
         expect(req).not.toHaveProperty('profile');
-        expect(result).toEqual({
-            status: 404, 
-            message: 'Profile with Id [1fdc5d72-aee1-44f2-a557-ee2200d4e13a] not found.'
-        })
+        expect(result instanceof CustomError).toBeTruthy();
+        expect(result.message).toEqual('Profile with Id [1fdc5d72-aee1-44f2-a557-ee2200d4e13a] not found.');
+        expect(result.status).toEqual(404);
     });
 
     test('should not find profile with given name', async () => {
@@ -67,9 +67,8 @@ describe('Profile exists tests', () => {
 
         const result = await isProfileWithNameCreated(req, null, (text) => text);
 
-        expect(result).toEqual({
-            status: 409, 
-            message: `Profile with name [${req.profileData.name}] already created.`
-        });
+        expect(result instanceof CustomError).toBeTruthy();
+        expect(result.message).toEqual(`Profile with name [${req.profileData.name}] already created.`);
+        expect(result.status).toEqual(409);
     });
 });

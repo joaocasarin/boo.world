@@ -1,6 +1,7 @@
 'use strict';
 
 const { ZodError } = require("zod");
+const CustomError = require("../helpers/CustomError");
 
 const errorHandler = async (error, _req, res, _next) => {
 
@@ -13,9 +14,16 @@ const errorHandler = async (error, _req, res, _next) => {
         });
     }
 
-    return res.status(error.status).send({
+    if (error instanceof CustomError) {
+        return res.status(error.status).send({
+            success: false,
+            errors: [error.message]
+        });
+    }
+
+    return res.status(500).send({
         success: false,
-        errors: [error.message]
+        errors: 'Internal Server Error.'
     });
 };
 

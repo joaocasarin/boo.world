@@ -2,7 +2,8 @@
 
 const ProfileZodSchema = require('../schemas/profile');
 const CommentZodSchema = require('../schemas/comment');
-const { isUUIDv4 } = require('../helpers');
+const { isUUIDv4 } = require('../helpers/uuidVerification');
+const CustomError = require('../helpers/CustomError');
 
 const validateProfileDataOnBody = (req, _, next) => {
     const { body } = req;
@@ -33,10 +34,7 @@ const validateCommentDataOnBody = (req, _, next) => {
 const validateIdParam = (req, _, next) => {
     const { params } = req;
 
-    if (!isUUIDv4(params['id'])) return next({
-        status: 400,
-        message: `Provided Id [${params['id']}] is not a UUIDv4.`
-    });
+    if (!isUUIDv4(params['id'])) return next(new CustomError(400, `Provided Id [${params['id']}] is not a UUIDv4.`));
 
     req.id = params['id'];
     return next();

@@ -1,5 +1,6 @@
 'use strict';
 
+const CustomError = require('../../src/helpers/CustomError');
 const { validateIdParam, validateProfileDataOnBody, validateCommentDataOnBody } = require('../../src/middlewares/validate-requests');
 const { ZodError } = require('zod');
 
@@ -27,10 +28,9 @@ describe('Validate requests tests', () => {
         const result = validateIdParam(req, null, (text) => text);
 
         expect(req).not.toHaveProperty('profileId');
-        expect(result).toEqual({
-            status: 400, 
-            message: `Provided Id [${req.params.id}] is not a UUIDv4.`
-        });
+        expect(result instanceof CustomError).toBeTruthy();
+        expect(result.message).toEqual(`Provided Id [${req.params.id}] is not a UUIDv4.`);
+        expect(result.status).toEqual(400);
     });
 
     test('should validate request body profile data and add it to req object', () => {
