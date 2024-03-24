@@ -16,39 +16,35 @@ const ProfileSchema = new Schema(
         },
         description: {
             type: String,
-            required: true
+            required: false
         },
         mbti: {
             type: String,
-            required: true,
-            match: /^[IE][SN][FT][PJ]$/
+            required: false
         },
         enneagram: {
             type: String,
-            required: true
-            // match: /^([1-9]w[1-9])$/
+            required: false
         },
         variant: {
             type: String,
-            required: true
-            // match: /^(SP|SO|SX)(\/(SP|SO|SX))*$/
+            required: false
         },
         tritype: {
             type: Number,
-            required: true
-            // match: /^\d{1,2}[w]?\d{1,2}[w]?\d{1,2}$/
+            required: false
         },
         socionics: {
             type: String,
-            required: true
+            required: false
         },
         sloan: {
             type: String,
-            required: true
+            required: false
         },
         psyche: {
             type: String,
-            required: true
+            required: false
         },
         image: {
             type: String,

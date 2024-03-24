@@ -77,22 +77,14 @@ describe('Profile routes', () => {
         expect(response.body.profile.name).toEqual(profileData.name);
     });
 
-    test('should not create a profile with given data missing required fields in req.body', async () => {
-        const profileData = {
-            name: 'John',
-            description: 'desc',
-            mbti: 'INTP',
-            enneagram: 'ennea',
-            variant: 'var',
-            tritype: 1,
-            socionics: 'soci'
-        };
+    test('should not create a profile with given data missing name in req.body', async () => {
+        const profileData = {};
 
         const response = await supertest(app).post('/profiles').send(profileData);
 
         expect(response.status).toEqual(400);
         expect(response.body.success).toBeFalsy();
-        expect(response.body.errors).toHaveLength(2);
+        expect(response.body.errors).toHaveLength(1);
     });
 
     test('should return an empty list of profiles', async () => {
@@ -163,24 +155,14 @@ describe('Profile routes', () => {
         expect(response.status).toEqual(201);
     });
 
-    test('should not create a comment with given data missing fields in req.body', async () => {
+    test('should not create a comment with given data missing authorId in req.body', async () => {
         const profile = await ProfileModel.create({
-            name: 'John',
-            description: 'desc',
-            mbti: 'INTP',
-            enneagram: 'ennea',
-            variant: 'var',
-            tritype: 1,
-            socionics: 'soci',
-            sloan: 'sloan',
-            psyche: 'psy'
+            name: 'John'
         });
 
         const commentData = {
             title: 'New Comment',
-            comment: 'The comment details',
-            mbti: 'INTJ',
-            enneagram: '123'
+            comment: 'The comment details'
         };
 
         const response = await supertest(app)

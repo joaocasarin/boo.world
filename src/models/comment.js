@@ -15,26 +15,23 @@ const CommentSchema = new Schema(
         },
         title: {
             type: String,
-            required: true
+            required: false
         },
         comment: {
             type: String,
-            required: true
+            required: false
         },
         mbti: {
             type: String,
-            required: false,
-            match: /^[IE][SN][FT][PJ]$/
+            required: false
         },
         enneagram: {
             type: String,
             required: false
-            // match: /^([1-9]w[1-9])$/
         },
         zodiac: {
             type: String,
             required: false
-            // match: /^(SP|SO|SX)(\/(SP|SO|SX))*$/
         },
         reactions: [
             {

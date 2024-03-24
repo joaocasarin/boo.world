@@ -56,16 +56,9 @@ describe('Validate requests tests', () => {
         expect(req.profileData).toEqual(req.body);
     });
 
-    test('should invalidate request body profile data missing some fields', () => {
+    test('should invalidate request body profile data missing name', () => {
         const req = {
-            body: {
-                name: 'John',
-                description: 'desc',
-                mbti: 'INTP',
-                enneagram: 'ennea',
-                variant: 'var',
-                tritype: 1
-            }
+            body: {}
         };
 
         const result = validateProfileDataOnBody(req, null, (error) => error);
@@ -92,14 +85,9 @@ describe('Validate requests tests', () => {
         expect(req.commentData).toEqual(req.body);
     });
 
-    test('should invalidate request body comment data missing some fields', () => {
+    test('should invalidate request body comment data missing authorId, title and comment fields', () => {
         const req = {
-            body: {
-                title: 'New Comment',
-                comment: 'The comment details',
-                mbti: 'INTJ',
-                enneagram: '123'
-            }
+            body: {}
         };
 
         const result = validateCommentDataOnBody(req, null, (error) => error);
