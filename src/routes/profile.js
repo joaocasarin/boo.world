@@ -15,7 +15,7 @@ const router = express.Router();
 
 router.get('/profiles', profileController.getProfiles);
 router.get('/profiles/:id/comments', validateIdParam, profileController.getComments);
-router.get('/profiles/:id', validateIdParam, profileController.getProfile);
+router.get('/profiles/:id', validateIdParam, profileController.getProfileJson);
 router.get('/:id', validateIdParam, profileController.getProfile);
 
 router.post(

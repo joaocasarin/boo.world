@@ -1,7 +1,9 @@
 const CustomError = require('../helpers/CustomError');
-const updateCommentService = require('../services/updateCommentService');
+const reactToCommentService = require('../services/reactToCommentService');
 const createCommentService = require('../services/createCommentService');
+const getProfileService = require('../services/getProfileService');
 const Logger = require('../configs/logger');
+const getCommentService = require('../services/getCommentService');
 
 class CommentController {
     async createComment(req, res, next) {
@@ -9,7 +11,11 @@ class CommentController {
         const commentData = req.body;
 
         try {
-            const comment = await createCommentService({ id, commentData });
+            const profile = await getProfileService(id);
+
+            if (profile instanceof CustomError) return next(profile);
+
+            const comment = await createCommentService({ profile, commentData });
 
             if (comment instanceof CustomError) return next(comment);
 
@@ -26,9 +32,13 @@ class CommentController {
         const { id } = req;
         const { profileId, reaction } = req.body;
 
-        const comment = await updateCommentService({ id, profileId, reaction });
+        let comment = await getCommentService(id);
 
-        if (comment instanceof CustomError) next(comment);
+        if (comment instanceof CustomError) return next(comment);
+
+        comment = await reactToCommentService({ comment, profileId, reaction });
+
+        if (comment instanceof CustomError) return next(comment);
 
         Logger.info(`Reacting to comment: ${JSON.stringify(comment)}`);
         return res.send({

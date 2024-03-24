@@ -8,7 +8,7 @@ const errorHandler = async (error, _req, res, _next) => {
         const errors = error.errors.map((e) => e.message);
 
         Logger.error(`An error occurred: Zod: ${JSON.stringify(errors)}`);
-        return res.status(500).send({
+        return res.status(400).send({
             success: false,
             errors
         });

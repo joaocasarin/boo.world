@@ -51,7 +51,8 @@ const CommentSchema = new Schema(
             findByProfileID(authorId) {
                 return this.find({ authorId });
             }
-        }
+        },
+        timestamps: true
     }
 );
 

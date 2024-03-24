@@ -13,7 +13,7 @@ describe('Profile routes', () => {
         await mongoose.connect(mongoServer.getUri());
     });
 
-    beforeEach(async () => {
+    afterEach(async () => {
         await mongoose.connection.dropDatabase();
         jest.resetAllMocks();
     });
@@ -77,7 +77,7 @@ describe('Profile routes', () => {
         expect(response.body.profile.name).toEqual(profileData.name);
     });
 
-    test('should not create a profile with given data missing fields in req.body', async () => {
+    test('should not create a profile with given data missing required fields in req.body', async () => {
         const profileData = {
             name: 'John',
             description: 'desc',
@@ -90,7 +90,7 @@ describe('Profile routes', () => {
 
         const response = await supertest(app).post('/profiles').send(profileData);
 
-        expect(response.status).toEqual(500);
+        expect(response.status).toEqual(400);
         expect(response.body.success).toBeFalsy();
         expect(response.body.errors).toHaveLength(2);
     });
@@ -187,7 +187,7 @@ describe('Profile routes', () => {
             .post(`/profiles/${profile.id}/comments`)
             .send(commentData);
 
-        expect(response.status).toEqual(500);
+        expect(response.status).toEqual(400);
         expect(response.body).toHaveProperty('success');
         expect(response.body.success).toBeFalsy();
         expect(response.body.errors).toHaveLength(1);

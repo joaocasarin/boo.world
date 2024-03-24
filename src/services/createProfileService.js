@@ -1,7 +1,7 @@
 const CustomError = require('../helpers/CustomError');
 const ProfileModel = require('../models/profile');
 
-const createProfileService = async ({ profileData }) => {
+const createProfileService = async (profileData) => {
     const possibleProfile = await ProfileModel.findByName(profileData.name);
 
     if (possibleProfile)

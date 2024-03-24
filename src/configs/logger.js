@@ -38,8 +38,7 @@ const transports = [
     }),
     new winston.transports.File({
         level: 'error',
-        filename: 'logs/error.log',
-        silent
+        filename: 'logs/error.log'
     }),
     new winston.transports.File({
         level: 'warn',

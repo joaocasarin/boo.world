@@ -70,7 +70,8 @@ const ProfileSchema = new Schema(
             findByName(name) {
                 return this.findOne({ name });
             }
-        }
+        },
+        timestamps: true
     }
 );
 

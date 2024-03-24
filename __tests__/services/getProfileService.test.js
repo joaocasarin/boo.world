@@ -3,13 +3,12 @@ const ProfileModel = require('../../src/models/profile');
 const getProfileService = require('../../src/services/getProfileService');
 
 describe('Get Profile Service', () => {
-    beforeEach(() => {
+    afterEach(() => {
         jest.resetAllMocks();
     });
 
     test('should get profile with given id', async () => {
         const id = 'f87a7517-b727-420c-9e44-ec5613ef5b20';
-        const commentId = 'a3e28ca7-1a72-4ea9-a545-2359ef9d996e';
 
         const profileData = {
             id,
@@ -21,26 +20,14 @@ describe('Get Profile Service', () => {
             tritype: 1,
             socionics: 'soci',
             sloan: 'sloan',
-            psyche: 'psy',
-            comments: [commentId]
+            psyche: 'psy'
         };
 
-        const commentData = {
-            id: commentId,
-            title: 'New Comment',
-            authorId: id,
-            comment: 'The comment details',
-            mbti: 'INTJ',
-            enneagram: '123'
-        };
+        ProfileModel.findByID = jest.fn().mockResolvedValue(profileData);
 
-        ProfileModel.findByID = jest.fn().mockResolvedValue({
-            populate: () => ({ ...profileData, comments: [commentData] })
-        });
+        const profile = await getProfileService(id);
 
-        const profile = await getProfileService({ id });
-
-        expect(profile.comments).toEqual([commentData]);
+        expect(profile).toEqual(profileData);
     });
 
     test('should not get the profile because it does not exist', async () => {
@@ -48,10 +35,10 @@ describe('Get Profile Service', () => {
 
         ProfileModel.findByID = jest.fn().mockResolvedValue(null);
 
-        const comment = await getProfileService({ id });
+        const profile = await getProfileService(id);
 
-        expect(comment instanceof CustomError).toBeTruthy();
-        expect(comment.message).toEqual(`Profile with Id [${id}] not found.`);
-        expect(comment.status).toEqual(404);
+        expect(profile instanceof CustomError).toBeTruthy();
+        expect(profile.message).toEqual(`Profile with Id [${id}] not found.`);
+        expect(profile.status).toEqual(404);
     });
 });

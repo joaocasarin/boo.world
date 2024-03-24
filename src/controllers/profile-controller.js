@@ -1,6 +1,6 @@
 const CustomError = require('../helpers/CustomError');
 const createProfileService = require('../services/createProfileService');
-const getCommentsService = require('../services/getCommentsService');
+const getPopulatedCommentsService = require('../services/getPopulatedCommentsService');
 const getProfileService = require('../services/getProfileService');
 const getProfilesService = require('../services/getProfilesService');
 const Logger = require('../configs/logger');
@@ -9,7 +9,7 @@ class ProfileController {
     async createProfile(req, res, next) {
         const { profileData } = req;
         try {
-            const profile = await createProfileService({ profileData });
+            const profile = await createProfileService(profileData);
 
             if (profile instanceof CustomError) return next(profile);
 
@@ -26,9 +26,13 @@ class ProfileController {
         const { id } = req;
 
         try {
-            const profile = await getProfileService({ id });
+            const profile = await getProfileService(id);
 
             if (profile instanceof CustomError) return next(profile);
+
+            profile.comments = await getPopulatedCommentsService({ profile, sortBy: '' });
+
+            if (profile.comments instanceof CustomError) return next(profile.comments);
 
             Logger.info(`Getting profile: ${JSON.stringify(profile)}`);
             return res.render('profile_template', {
@@ -39,15 +43,42 @@ class ProfileController {
         }
     }
 
-    async getProfiles(req, res, next) {
-        const { query } = req;
+    async getProfileJson(req, res, next) {
+        const { id, query } = req;
+        const { sortBy } = query;
 
         try {
-            const profiles = await getProfilesService({ query });
+            const profile = await getProfileService(id);
+
+            if (profile instanceof CustomError) return next(profile);
+
+            profile.comments = await getPopulatedCommentsService({ profile, sortBy });
+
+            if (profile.comments instanceof CustomError) return next(profile.comments);
+
+            Logger.info(`Getting profile JSON: ${JSON.stringify(profile)}`);
+            return res.send({
+                profile
+            });
+        } catch (error) {
+            return next(error);
+        }
+    }
+
+    async getProfiles(req, res, next) {
+        const { query } = req;
+        const { sortBy } = query;
+
+        try {
+            const profiles = await getProfilesService();
+
+            const expandedProfiles = await Promise.all(
+                profiles.map((profile) => getPopulatedCommentsService({ profile, sortBy }))
+            );
 
             Logger.info(`Getting all profiles: ${JSON.stringify(profiles)}`);
             return res.send({
-                profiles
+                profiles: expandedProfiles
             });
         } catch (error) {
             return next(error);
@@ -56,9 +87,14 @@ class ProfileController {
 
     async getComments(req, res, next) {
         const { id, query } = req;
+        const { sortBy } = query;
 
         try {
-            const comments = await getCommentsService({ id, query });
+            const profile = await getProfileService(id);
+
+            if (profile instanceof CustomError) return next(profile);
+
+            const comments = await getPopulatedCommentsService({ profile, sortBy });
 
             if (comments instanceof CustomError) return next(comments);
 

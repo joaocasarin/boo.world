@@ -3,7 +3,7 @@ const ProfileModel = require('../../src/models/profile');
 const createProfileService = require('../../src/services/createProfileService');
 
 describe('Create Profile Service', () => {
-    beforeEach(() => {
+    afterEach(() => {
         jest.resetAllMocks();
     });
 
@@ -20,14 +20,16 @@ describe('Create Profile Service', () => {
             tritype: 1,
             socionics: 'soci',
             sloan: 'sloan',
-            psyche: 'psy'
+            psyche: 'psy',
+            createdAt: '2024-03-24T03:49:59.395Z',
+            updatedAt: '2024-03-24T03:50:32.434Z'
         };
 
         ProfileModel.findByName = jest.fn().mockResolvedValue(null);
 
         ProfileModel.create = jest.fn().mockResolvedValue(profileData);
 
-        const profile = await createProfileService({ profileData });
+        const profile = await createProfileService(profileData);
 
         expect(profile).toEqual(profileData);
     });
@@ -45,12 +47,14 @@ describe('Create Profile Service', () => {
             tritype: 1,
             socionics: 'soci',
             sloan: 'sloan',
-            psyche: 'psy'
+            psyche: 'psy',
+            createdAt: '2024-03-24T03:49:59.395Z',
+            updatedAt: '2024-03-24T03:50:32.434Z'
         };
 
         ProfileModel.findByName = jest.fn().mockResolvedValue(profileData);
 
-        const profile = await createProfileService({ profileData });
+        const profile = await createProfileService(profileData);
 
         expect(profile instanceof CustomError).toBeTruthy();
         expect(profile.message).toEqual(`Profile with name [${profileData.name}] already created.`);

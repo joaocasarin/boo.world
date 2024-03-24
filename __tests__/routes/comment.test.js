@@ -12,7 +12,7 @@ describe('Comment routes', () => {
         await mongoose.connect(mongoServer.getUri());
     });
 
-    beforeEach(async () => {
+    afterEach(async () => {
         await mongoose.connection.dropDatabase();
         jest.resetAllMocks();
     });
@@ -31,7 +31,9 @@ describe('Comment routes', () => {
             comment: 'The comment details',
             mbti: 'INTJ',
             enneagram: '123',
-            zodiac: '123'
+            zodiac: '123',
+            createdAt: '2024-03-24T03:49:59.395Z',
+            updatedAt: '2024-03-24T03:50:32.434Z'
         });
 
         const data = {
@@ -54,7 +56,9 @@ describe('Comment routes', () => {
             mbti: 'INTJ',
             enneagram: '123',
             zodiac: '123',
-            reactions: [profileId]
+            reactions: [profileId],
+            createdAt: '2024-03-24T03:49:59.395Z',
+            updatedAt: '2024-03-24T03:50:32.434Z'
         });
 
         const data = {

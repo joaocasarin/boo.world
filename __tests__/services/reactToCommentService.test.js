@@ -1,22 +1,10 @@
 const CustomError = require('../../src/helpers/CustomError');
 const CommentModel = require('../../src/models/comment');
-const updateCommentService = require('../../src/services/updateCommentService');
+const reactToCommentService = require('../../src/services/reactToCommentService');
 
-describe('Update Comment Service', () => {
-    beforeEach(() => {
+describe('React To Comment Service', () => {
+    afterEach(() => {
         jest.resetAllMocks();
-    });
-
-    test("should not update a comment's reaction because it does not exist", async () => {
-        const id = 'a3e28ca7-1a72-4ea9-a545-2359ef9d996e';
-
-        CommentModel.findByID = jest.fn().mockResolvedValue(null);
-
-        const comment = await updateCommentService({ id, profileId: null, reaction: null });
-
-        expect(comment instanceof CustomError).toBeTruthy();
-        expect(comment.message).toEqual(`Comment with Id [${id}] not found.`);
-        expect(comment.status).toEqual(404);
     });
 
     test('should not unlike a comment because the profileId has not reacted to it yet', async () => {
@@ -25,17 +13,18 @@ describe('Update Comment Service', () => {
         const reaction = 'unlike';
 
         const commentData = {
+            id,
             title: 'New Comment',
-            authorId: id,
+            authorId: profileId,
             comment: 'The comment details',
             mbti: 'INTJ',
             enneagram: '123',
-            reactions: []
+            reactions: [],
+            createdAt: '2024-03-24T03:49:59.395Z',
+            updatedAt: '2024-03-24T03:50:32.434Z'
         };
 
-        CommentModel.findByID = jest.fn().mockResolvedValue(commentData);
-
-        const comment = await updateCommentService({ id, profileId, reaction });
+        const comment = await reactToCommentService({ comment: commentData, profileId, reaction });
 
         expect(comment instanceof CustomError).toBeTruthy();
         expect(comment.message).toEqual(
@@ -50,17 +39,18 @@ describe('Update Comment Service', () => {
         const reaction = 'like';
 
         const commentData = {
+            id,
             title: 'New Comment',
-            authorId: id,
+            authorId: profileId,
             comment: 'The comment details',
             mbti: 'INTJ',
             enneagram: '123',
-            reactions: [profileId]
+            reactions: [profileId],
+            createdAt: '2024-03-24T03:49:59.395Z',
+            updatedAt: '2024-03-24T03:50:32.434Z'
         };
 
-        CommentModel.findByID = jest.fn().mockResolvedValue(commentData);
-
-        const comment = await updateCommentService({ id, profileId, reaction });
+        const comment = await reactToCommentService({ comment: commentData, profileId, reaction });
 
         expect(comment instanceof CustomError).toBeTruthy();
         expect(comment.message).toEqual(
@@ -75,21 +65,23 @@ describe('Update Comment Service', () => {
         const reaction = 'unlike';
 
         const commentData = {
+            id,
             title: 'New Comment',
-            authorId: id,
+            authorId: profileId,
             comment: 'The comment details',
             mbti: 'INTJ',
             enneagram: '123',
-            reactions: [profileId]
+            reactions: [profileId],
+            createdAt: '2024-03-24T03:49:59.395Z',
+            updatedAt: '2024-03-24T03:50:32.434Z'
         };
 
-        CommentModel.findByID = jest.fn().mockResolvedValue(commentData);
+        CommentModel.findOneAndUpdate = jest.fn().mockResolvedValue({
+            ...commentData,
+            reactions: commentData.reactions.filter((reactionId) => reactionId !== profileId)
+        });
 
-        CommentModel.findOneAndUpdate = jest
-            .fn()
-            .mockResolvedValue({ ...commentData, reactions: [] });
-
-        const comment = await updateCommentService({ id, profileId, reaction });
+        const comment = await reactToCommentService({ comment: commentData, profileId, reaction });
 
         expect(comment.reactions).toHaveLength(0);
     });
@@ -100,21 +92,23 @@ describe('Update Comment Service', () => {
         const reaction = 'like';
 
         const commentData = {
+            id,
             title: 'New Comment',
-            authorId: id,
+            authorId: profileId,
             comment: 'The comment details',
             mbti: 'INTJ',
             enneagram: '123',
-            reactions: []
+            reactions: [],
+            createdAt: '2024-03-24T03:49:59.395Z',
+            updatedAt: '2024-03-24T03:50:32.434Z'
         };
 
-        CommentModel.findByID = jest.fn().mockResolvedValue(commentData);
+        CommentModel.findOneAndUpdate = jest.fn().mockResolvedValue({
+            ...commentData,
+            reactions: [profileId]
+        });
 
-        CommentModel.findOneAndUpdate = jest
-            .fn()
-            .mockResolvedValue({ ...commentData, reactions: [profileId] });
-
-        const comment = await updateCommentService({ id, profileId, reaction });
+        const comment = await reactToCommentService({ comment: commentData, profileId, reaction });
 
         expect(comment.reactions).toHaveLength(1);
     });
