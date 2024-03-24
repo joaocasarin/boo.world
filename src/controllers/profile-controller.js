@@ -1,6 +1,6 @@
 const CustomError = require('../helpers/CustomError');
 const createProfileService = require('../services/createProfileService');
-const getPopulatedProfileService = require('../services/getPopulatedProfileService');
+const getExpandedCommentsService = require('../services/getExpandedCommentsService');
 const getProfileService = require('../services/getProfileService');
 const getProfilesService = require('../services/getProfilesService');
 const Logger = require('../configs/logger');
@@ -30,7 +30,7 @@ class ProfileController {
 
             if (profile instanceof CustomError) return next(profile);
 
-            profile.comments = await getPopulatedProfileService({ profile, sortBy: '' });
+            profile.comments = await getExpandedCommentsService({ profile, sortBy: '' });
 
             if (profile.comments instanceof CustomError) return next(profile.comments);
 
@@ -52,7 +52,7 @@ class ProfileController {
 
             if (profile instanceof CustomError) return next(profile);
 
-            profile.comments = await getPopulatedProfileService({ profile, sortBy, filterBy });
+            profile.comments = await getExpandedCommentsService({ profile, sortBy, filterBy });
 
             if (profile.comments instanceof CustomError) return next(profile.comments);
 
@@ -73,10 +73,20 @@ class ProfileController {
             const profiles = await getProfilesService();
 
             const expandedProfiles = await Promise.all(
-                profiles.map((profile) => getPopulatedProfileService({ profile, sortBy, filterBy }))
+                profiles.map(async (profile) => {
+                    const comments = await getExpandedCommentsService({
+                        profile,
+                        sortBy,
+                        filterBy
+                    });
+
+                    profile.comments = comments;
+
+                    return profile;
+                })
             );
 
-            Logger.info(`Getting all profiles: ${JSON.stringify(profiles)}`);
+            Logger.info(`Getting all profiles: ${JSON.stringify(expandedProfiles)}`);
             return res.send({
                 profiles: expandedProfiles
             });
@@ -94,7 +104,7 @@ class ProfileController {
 
             if (profile instanceof CustomError) return next(profile);
 
-            const comments = await getPopulatedProfileService({ profile, sortBy, filterBy });
+            const comments = await getExpandedCommentsService({ profile, sortBy, filterBy });
 
             if (comments instanceof CustomError) return next(comments);
 

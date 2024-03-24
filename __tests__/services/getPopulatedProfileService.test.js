@@ -1,4 +1,4 @@
-const getPopulatedProfileService = require('../../src/services/getPopulatedProfileService');
+const getExpandedCommentsService = require('../../src/services/getExpandedCommentsService');
 
 describe('Get Populated Profile Service', () => {
     afterEach(() => {
@@ -51,7 +51,7 @@ describe('Get Populated Profile Service', () => {
 
         profile.populate = jest.fn().mockResolvedValue(profile);
 
-        const comments = await getPopulatedProfileService({ profile, sortBy, filterBy });
+        const comments = await getExpandedCommentsService({ profile, sortBy, filterBy });
 
         expect(comments).toEqual(profile.comments);
     });
@@ -110,7 +110,7 @@ describe('Get Populated Profile Service', () => {
             return expandedProfile;
         });
 
-        const comments = await getPopulatedProfileService({ profile, sortBy, filterBy });
+        const comments = await getExpandedCommentsService({ profile, sortBy, filterBy });
 
         expect(comments).toEqual([commentData2, commentData1]);
     });
@@ -164,7 +164,7 @@ describe('Get Populated Profile Service', () => {
 
         profile.populate = jest.fn().mockResolvedValue(profile);
 
-        const comments = await getPopulatedProfileService({ profile, sortBy, filterBy });
+        const comments = await getExpandedCommentsService({ profile, sortBy, filterBy });
 
         expect(comments).toEqual([commentData2, commentData1]);
     });
@@ -246,7 +246,7 @@ describe('Get Populated Profile Service', () => {
 
         profile.populate = jest.fn().mockResolvedValue(profile);
 
-        const comments = await getPopulatedProfileService({ profile, sortBy, filterBy });
+        const comments = await getExpandedCommentsService({ profile, sortBy, filterBy });
 
         expect(comments).toEqual([commentMbti, commentMbtiEnneagram, commentMbtiZodiac]);
     });
@@ -328,7 +328,7 @@ describe('Get Populated Profile Service', () => {
 
         profile.populate = jest.fn().mockResolvedValue(profile);
 
-        const comments = await getPopulatedProfileService({ profile, sortBy, filterBy });
+        const comments = await getExpandedCommentsService({ profile, sortBy, filterBy });
 
         expect(comments).toEqual([commentMbtiEnneagram, commentEnneagram]);
     });
@@ -410,7 +410,7 @@ describe('Get Populated Profile Service', () => {
 
         profile.populate = jest.fn().mockResolvedValue(profile);
 
-        const comments = await getPopulatedProfileService({ profile, sortBy, filterBy });
+        const comments = await getExpandedCommentsService({ profile, sortBy, filterBy });
 
         expect(comments).toEqual([commentMbtiZodiac, commentZodiac]);
     });

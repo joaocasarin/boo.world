@@ -28,6 +28,7 @@ module.exports = {
         'import/first': 'off',
         'linebreak-style': ['error', 'unix'],
         indent: ['error', 4],
+        'no-param-reassign': 'off',
         'comma-dangle': ['error', 'never'],
         'class-methods-use-this': 'off',
         semi: ['error', 'always']

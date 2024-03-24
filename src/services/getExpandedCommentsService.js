@@ -1,4 +1,4 @@
-const getPopulatedProfileService = async ({ profile, sortBy, filterBy }) => {
+const getExpandedCommentsService = async ({ profile, sortBy, filterBy }) => {
     const sort = {};
 
     if (sortBy === 'recent') sort.updatedAt = -1;
@@ -11,7 +11,9 @@ const getPopulatedProfileService = async ({ profile, sortBy, filterBy }) => {
     });
 
     if (sortBy === 'best') {
-        expandedProfile.comments.sort((a, b) => b.reactions.length - a.reactions.length);
+        expandedProfile.comments = expandedProfile.comments.sort(
+            (a, b) => b.reactions.length - a.reactions.length
+        );
     }
 
     if (filterBy) {
@@ -20,11 +22,11 @@ const getPopulatedProfileService = async ({ profile, sortBy, filterBy }) => {
             if (filterBy === 'enneagram') return !!comment.enneagram;
             if (filterBy === 'zodiac') return !!comment.zodiac;
 
-            return true; // No filtering if filterBy is not one of the expected fields
+            return true;
         });
     }
 
     return expandedProfile.comments;
 };
 
-module.exports = getPopulatedProfileService;
+module.exports = getExpandedCommentsService;

@@ -119,13 +119,15 @@ describe('Profile routes', () => {
             psyche: 'psy'
         };
 
-        await ProfileModel.create(profileData1);
-        await ProfileModel.create(profileData2);
+        const profile1 = await ProfileModel.create(profileData1);
+        const profile2 = await ProfileModel.create(profileData2);
 
         const response = await supertest(app).get('/profiles');
 
         expect(response.status).toEqual(200);
         expect(response.body.profiles).toHaveLength(2);
+        expect(response.body.profiles[0].id).toBe(profile1.id);
+        expect(response.body.profiles[1].id).toBe(profile2.id);
     });
 
     test('should create a new comment for given profile id', async () => {
