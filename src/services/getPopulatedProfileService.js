@@ -1,4 +1,4 @@
-const getPopulatedCommentsService = async ({ profile, sortBy }) => {
+const getPopulatedProfileService = async ({ profile, sortBy }) => {
     const sort = {};
 
     if (sortBy === 'recent') sort.updatedAt = -1;
@@ -17,4 +17,4 @@ const getPopulatedCommentsService = async ({ profile, sortBy }) => {
     return expandedProfile.comments;
 };
 
-module.exports = getPopulatedCommentsService;
+module.exports = getPopulatedProfileService;

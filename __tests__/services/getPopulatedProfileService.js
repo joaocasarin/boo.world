@@ -1,6 +1,6 @@
-const getPopulatedCommentsService = require('../../src/services/getPopulatedCommentsService');
+const getPopulatedProfileService = require('../../src/services/getPopulatedProfileService');
 
-describe('Get Comments Service', () => {
+describe('Get Populated Profile Service', () => {
     afterEach(() => {
         jest.resetAllMocks();
     });
@@ -50,7 +50,7 @@ describe('Get Comments Service', () => {
 
         profile.populate = jest.fn().mockResolvedValue(profile);
 
-        const comments = await getPopulatedCommentsService({ profile, sortBy });
+        const comments = await getPopulatedProfileService({ profile, sortBy });
 
         expect(comments).toEqual(profile.comments);
     });
@@ -108,7 +108,7 @@ describe('Get Comments Service', () => {
             return expandedProfile;
         });
 
-        const comments = await getPopulatedCommentsService({ profile, sortBy });
+        const comments = await getPopulatedProfileService({ profile, sortBy });
 
         expect(comments).toEqual([commentData2, commentData1]);
     });
@@ -161,7 +161,7 @@ describe('Get Comments Service', () => {
 
         profile.populate = jest.fn().mockResolvedValue(profile);
 
-        const comments = await getPopulatedCommentsService({ profile, sortBy });
+        const comments = await getPopulatedProfileService({ profile, sortBy });
 
         expect(comments).toEqual([commentData2, commentData1]);
     });

@@ -1,6 +1,6 @@
 const CustomError = require('../helpers/CustomError');
 const createProfileService = require('../services/createProfileService');
-const getPopulatedCommentsService = require('../services/getPopulatedCommentsService');
+const getPopulatedProfileService = require('../services/getPopulatedProfileService');
 const getProfileService = require('../services/getProfileService');
 const getProfilesService = require('../services/getProfilesService');
 const Logger = require('../configs/logger');
@@ -30,7 +30,7 @@ class ProfileController {
 
             if (profile instanceof CustomError) return next(profile);
 
-            profile.comments = await getPopulatedCommentsService({ profile, sortBy: '' });
+            profile.comments = await getPopulatedProfileService({ profile, sortBy: '' });
 
             if (profile.comments instanceof CustomError) return next(profile.comments);
 
@@ -52,7 +52,7 @@ class ProfileController {
 
             if (profile instanceof CustomError) return next(profile);
 
-            profile.comments = await getPopulatedCommentsService({ profile, sortBy });
+            profile.comments = await getPopulatedProfileService({ profile, sortBy });
 
             if (profile.comments instanceof CustomError) return next(profile.comments);
 
@@ -73,7 +73,7 @@ class ProfileController {
             const profiles = await getProfilesService();
 
             const expandedProfiles = await Promise.all(
-                profiles.map((profile) => getPopulatedCommentsService({ profile, sortBy }))
+                profiles.map((profile) => getPopulatedProfileService({ profile, sortBy }))
             );
 
             Logger.info(`Getting all profiles: ${JSON.stringify(profiles)}`);
@@ -94,7 +94,7 @@ class ProfileController {
 
             if (profile instanceof CustomError) return next(profile);
 
-            const comments = await getPopulatedCommentsService({ profile, sortBy });
+            const comments = await getPopulatedProfileService({ profile, sortBy });
 
             if (comments instanceof CustomError) return next(comments);
 
